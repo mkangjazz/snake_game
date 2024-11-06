@@ -1,52 +1,95 @@
 using UnityEngine;
+using System.Collections;
 
 public class Movement : MonoBehaviour
 {
-    public Rigidbody rigidBody;
-    public float forwardForce = 20f;
-
-    // Update() called every frame
-    // FixedUpdate() based on absolute time
-    // Frame rates can vary, if need millisecond precision use FixedUpdate()
-
-    private void FixedUpdate()
+    public enum Direction
     {
-        // forward always applied
-        rigidBody.AddForce(0, 0, forwardForce);
-
-        // "turn" only, relative to facing direction?
-        // a/d left right
-
-        if (Input.GetKey("left") || Input.GetKey("a"))
-        {
-            Debug.Log("turn left");
-        }
-
-        if (Input.GetKey("right") || Input.GetKey("d"))
-        {
-            Debug.Log("turn right");
-        }
-
-        //if (Input.GetKey("d"))
-        //{
-        //    rb.AddForce(sidewaysForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
-        //}
-        //if (Input.GetKey("a"))
-        //{
-        //    rb.AddForce(-sidewaysForce * Time.deltaTime, 0, 0, ForceMode.VelocityChange);
-        //}
-        //if (Input.GetKey("w"))
-        //{
-        //    rb.AddForce(0, 0, forwardForce * Time.deltaTime);
-        //}
-        //if (Input.GetKey("s"))
-        //{
-        //    rb.AddForce(0, 0, -forwardForce * Time.deltaTime);
-        //}
+        LEFT,
+        RIGHT,
+        UP,
+        DOWN
     }
 
-    void Update()
+    public Rigidbody rigidBody;
+    private bool isKeyPressed = false;
+    public float speed = 2f;
+    private Direction dir = Direction.RIGHT;
+
+    private void Update()
     {
-                
+        this.Move();
+
+        if (Input.GetKeyUp("left"))
+        {
+            this.TurnLeft();
+        }
+        else if (Input.GetKeyUp("right"))
+        {
+            this.TurnRight();
+        }
+    }
+
+    private void Move()
+    {
+        if (this.dir == Direction.RIGHT)
+        {
+            this.rigidBody.velocity = new Vector3(this.speed, 0, 0);
+        }
+        else if (this.dir == Direction.UP)
+        {
+            this.rigidBody.velocity = new Vector3(0, 0, this.speed);
+        }
+        else if (this.dir == Direction.LEFT)
+        {
+            this.rigidBody.velocity = new Vector3(-this.speed, 0, 0);
+        }
+        else if (this.dir == Direction.DOWN)
+        {
+            this.rigidBody.velocity = new Vector3(0, 0, -this.speed);
+        }
+    }
+    private void TurnLeft()
+    {
+        if (this.dir == Direction.RIGHT)
+        {
+            this.dir = Direction.UP;
+        }
+        else if (this.dir == Direction.UP)
+        {
+            this.dir = Direction.LEFT;
+        }
+        else if (this.dir == Direction.LEFT)
+        {
+            this.dir = Direction.DOWN;
+        }
+        else if (this.dir == Direction.DOWN)
+        {
+            this.dir = Direction.RIGHT;
+        }
+
+        Debug.Log("turn left: " + this.dir);
+    }
+
+    private void TurnRight()
+    {
+        if (this.dir == Direction.RIGHT)
+        {
+            this.dir = Direction.DOWN;
+        }
+        else if (this.dir == Direction.DOWN)
+        {
+            this.dir = Direction.LEFT;
+        }
+        else if (this.dir == Direction.LEFT)
+        {
+            this.dir = Direction.UP;
+        }
+        else if (this.dir == Direction.UP)
+        {
+            this.dir = Direction.RIGHT;
+        }
+
+        Debug.Log("turn right:" + this.dir);
     }
 }
