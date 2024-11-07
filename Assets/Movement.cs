@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 public class Movement : MonoBehaviour
 {
@@ -12,42 +11,109 @@ public class Movement : MonoBehaviour
     }
 
     public Rigidbody rigidBody;
-    private bool isKeyPressed = false;
-    public float speed = 2f;
+    public GameObject snake_body;
+
+    private float speed = 2f;
+    private float bodyTimer= 0.0f;
+    private float bodyWait = 0.5f;
+
     private Direction dir = Direction.RIGHT;
+
+    private bool isKeyDown = false;
+    private float keyDelay = 1.0f;
+    private float keyTimer = 0.0f;
 
     private void Update()
     {
+        this.keyTimer += Time.deltaTime;
+        this.bodyTimer += Time.deltaTime;
+
         this.Move();
 
-        if (Input.GetKeyUp("left"))
+        if (true)
         {
-            this.TurnLeft();
+            this.CreateBodyAtPosition();
+            //this.bodyTimer = bodyTimer - this.waitTime;
         }
-        else if (Input.GetKeyUp("right"))
+
+        Debug.Log("isKeyDown: " + isKeyDown);
+
+        if (
+            Input.GetKeyDown("left") ||
+            Input.GetKeyDown("a") ||
+            Input.GetKeyDown("right") ||
+            Input.GetKeyDown("d")
+        )
         {
-            this.TurnRight();
+            isKeyDown = true;
         }
+
+        if (
+            Input.GetKeyUp("left") ||
+            Input.GetKeyUp("a") ||
+            Input.GetKeyUp("right") ||
+            Input.GetKeyUp("d")
+        )
+        {
+            isKeyDown = false;
+        }
+
+        if (
+            Input.GetKeyDown("left") ||
+            Input.GetKeyDown("a")
+        )
+        {
+            if (
+                this.keyTimer > this.keyDelay
+            )
+            {
+                this.TurnLeft();
+            }
+        }
+        
+        if (
+            Input.GetKeyDown("right") ||
+            Input.GetKeyDown("d")
+        )
+        {
+            if (
+                this.keyTimer > this.keyDelay
+            )
+            {
+                this.TurnRight();
+            }
+        }
+    }
+    private void CreateBodyAtPosition()
+    {
+        Debug.Log("CreateBodyAtPosition " + rigidBody.position);
+        Instantiate(snake_body, rigidBody.position, Quaternion.identity);
     }
 
     private void Move()
     {
         if (this.dir == Direction.RIGHT)
         {
-            this.rigidBody.velocity = new Vector3(this.speed, 0, 0);
+            transform.position = transform.position + new Vector3(this.speed, 0, 0) * Time.deltaTime;
         }
         else if (this.dir == Direction.UP)
         {
-            this.rigidBody.velocity = new Vector3(0, 0, this.speed);
+            transform.position = transform.position + new Vector3(0, 0, this.speed) * Time.deltaTime;
         }
         else if (this.dir == Direction.LEFT)
         {
-            this.rigidBody.velocity = new Vector3(-this.speed, 0, 0);
+            transform.position = transform.position + new Vector3(-this.speed, 0, 0) * Time.deltaTime;
         }
         else if (this.dir == Direction.DOWN)
         {
-            this.rigidBody.velocity = new Vector3(0, 0, -this.speed);
+            transform.position = transform.position + new Vector3(0, 0, -this.speed) * Time.deltaTime;
         }
+    }
+
+    private void ResetKeyTimer()
+    {
+        // Unity says subtracting time elapsed is more accurate over time than resetting to zero...
+        this.keyTimer = 0;
     }
     private void TurnLeft()
     {
@@ -68,6 +134,7 @@ public class Movement : MonoBehaviour
             this.dir = Direction.RIGHT;
         }
 
+        this.ResetKeyTimer();
         Debug.Log("turn left: " + this.dir);
     }
 
@@ -90,6 +157,7 @@ public class Movement : MonoBehaviour
             this.dir = Direction.RIGHT;
         }
 
+        this.ResetKeyTimer();
         Debug.Log("turn right:" + this.dir);
     }
 }
