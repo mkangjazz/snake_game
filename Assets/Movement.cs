@@ -11,32 +11,29 @@ public class Movement : MonoBehaviour
     }
 
     public Rigidbody rigidBody;
-    public GameObject snake_body;
 
     private float speed = 2f;
-    private float bodyTimer= 0.0f;
-    private float bodyWait = 0.5f;
-
     private Direction dir = Direction.RIGHT;
 
     private bool isKeyDown = false;
     private float keyDelay = 1.0f;
     private float keyTimer = 0.0f;
 
+    private float moveTimer = 0.0f;
+    private float moveWait = 0.5f;
+
     private void Update()
     {
         this.keyTimer += Time.deltaTime;
-        this.bodyTimer += Time.deltaTime;
+        this.moveTimer += Time.deltaTime;
 
-        this.Move();
-
-        if (true)
+        if (moveTimer > moveWait)
         {
-            this.CreateBodyAtPosition();
-            //this.bodyTimer = bodyTimer - this.waitTime;
+            this.Move();
+
         }
 
-        Debug.Log("isKeyDown: " + isKeyDown);
+        //Debug.Log("isKeyDown: " + isKeyDown);
 
         if (
             Input.GetKeyDown("left") ||
@@ -70,7 +67,7 @@ public class Movement : MonoBehaviour
                 this.TurnLeft();
             }
         }
-        
+
         if (
             Input.GetKeyDown("right") ||
             Input.GetKeyDown("d")
@@ -84,30 +81,35 @@ public class Movement : MonoBehaviour
             }
         }
     }
-    private void CreateBodyAtPosition()
-    {
-        Debug.Log("CreateBodyAtPosition " + rigidBody.position);
-        Instantiate(snake_body, rigidBody.position, Quaternion.identity);
-    }
+
 
     private void Move()
     {
+        var distance = this.rigidBody.transform.localScale.x;
+
         if (this.dir == Direction.RIGHT)
         {
-            transform.position = transform.position + new Vector3(this.speed, 0, 0) * Time.deltaTime;
+            transform.position = transform.position + new Vector3(distance, 0, 0);
         }
         else if (this.dir == Direction.UP)
         {
-            transform.position = transform.position + new Vector3(0, 0, this.speed) * Time.deltaTime;
+            transform.position = transform.position + new Vector3(0, 0, distance);
         }
         else if (this.dir == Direction.LEFT)
         {
-            transform.position = transform.position + new Vector3(-this.speed, 0, 0) * Time.deltaTime;
+            transform.position = transform.position + new Vector3(-distance, 0, 0);
         }
         else if (this.dir == Direction.DOWN)
         {
-            transform.position = transform.position + new Vector3(0, 0, -this.speed) * Time.deltaTime;
+            transform.position = transform.position + new Vector3(0, 0, -distance);
         }
+
+        this.ResetMoveTimer();
+    }
+
+    private void ResetMoveTimer()
+    {
+        this.moveTimer = 0;
     }
 
     private void ResetKeyTimer()
