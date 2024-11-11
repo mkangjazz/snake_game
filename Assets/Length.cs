@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Length : MonoBehaviour
 {
-    public Rigidbody rigidBody;
+    public Rigidbody snake_head;
     public GameObject snake_body;
 
-    private int maxLength = 3;
+    private int maxLength = 12;
     private float growTimer = 0.0f;
-    private float growWait = 0.5f;
+    private float growWait = 0.1f;
     private float destroyTimer = 0.0f;
 
     private List<GameObject> body = new List<GameObject>();
@@ -19,10 +19,15 @@ public class Length : MonoBehaviour
         this.growTimer += Time.deltaTime;
         this.destroyTimer += Time.deltaTime;
 
-        if (growTimer > growWait)
-        {
-            this.CreateBodyAtPosition();
-        }
+        // rather than keep growing based on time,
+        // how about an event?
+        // when the snake moves
+        // call the create function
+
+        //if (growTimer > growWait)
+        //{
+        //    this.CreateBodyAtPosition();
+        //}
 
         if (
             destroyTimer > growWait &&
@@ -33,19 +38,26 @@ public class Length : MonoBehaviour
         }
     }
 
-    private void CreateBodyAtPosition()
+    public void CreateBodyAtPosition(Vector3 pos)
     {
-        //Debug.Log("CreateBodyAtPosition " + rigidBody.position);
-        var obj = Instantiate(snake_body, rigidBody.position, Quaternion.identity);
-
+        var obj = Instantiate(
+            snake_body,
+            pos,
+            Quaternion.identity
+        );
         this.body.Add(obj);
-        this.ResetGrowTimer();
+
+        obj.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     private void DestroyBodyAtPosition()
     {
+        if (this.body.Count < 1)
+        {
+            return;
+        }
+
         var obj = this.body[0];
-        //Debug.Log("DestroyBodyAtPosition: " + obj);
 
         this.body.Remove(obj);
         Destroy(obj);

@@ -1,18 +1,24 @@
+using System;
 using UnityEngine;
 
 public class Collision : MonoBehaviour
 {
     public Movement movement;
+
     private void OnCollisionEnter(UnityEngine.Collision collisionInfo)
     {
         Debug.Log("We hit: " + collisionInfo.collider.tag);
 
-        //if (collisionInfo.collider.tag == "obstacle")
-        //{
-        //    Debug.Log("We hit an obstacle");
-        //    movement.enabled = false;
+        GameObject gameManager = GameObject.Find("GameManager");
 
-        //    FindObjectOfType<GameManager>().endGame();
-        //}
+        if (collisionInfo.collider.tag == "SnakeBody")
+        {
+            gameManager.GetComponent<GameManager>().EndGame();
+        }
+
+        if (collisionInfo.collider.tag == "Wall")
+        {
+            gameManager.GetComponent<GameManager>().EndGame();
+        }
     }
 }

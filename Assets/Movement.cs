@@ -10,17 +10,15 @@ public class Movement : MonoBehaviour
         DOWN
     }
 
-    public Rigidbody rigidBody;
+    // public Rigidbody rigidBody;
 
-    private float speed = 2f;
     private Direction dir = Direction.RIGHT;
-
     private bool isKeyDown = false;
-    private float keyDelay = 1.0f;
+    private float keyDelay = 0.0f;
     private float keyTimer = 0.0f;
 
     private float moveTimer = 0.0f;
-    private float moveWait = 0.5f;
+    private float moveWait = 0.1f; // maybe this should be controlled by a third party...
 
     private void Update()
     {
@@ -30,10 +28,7 @@ public class Movement : MonoBehaviour
         if (moveTimer > moveWait)
         {
             this.Move();
-
         }
-
-        //Debug.Log("isKeyDown: " + isKeyDown);
 
         if (
             Input.GetKeyDown("left") ||
@@ -85,7 +80,8 @@ public class Movement : MonoBehaviour
 
     private void Move()
     {
-        var distance = this.rigidBody.transform.localScale.x;
+        var distance = gameObject.GetComponent<Rigidbody>().transform.localScale.x;
+        var currPosition = transform.localPosition;
 
         if (this.dir == Direction.RIGHT)
         {
@@ -103,6 +99,10 @@ public class Movement : MonoBehaviour
         {
             transform.position = transform.position + new Vector3(0, 0, -distance);
         }
+
+        GetComponent<Length>().CreateBodyAtPosition(
+            currPosition
+        );
 
         this.ResetMoveTimer();
     }
@@ -137,7 +137,6 @@ public class Movement : MonoBehaviour
         }
 
         this.ResetKeyTimer();
-        Debug.Log("turn left: " + this.dir);
     }
 
     private void TurnRight()
@@ -160,6 +159,5 @@ public class Movement : MonoBehaviour
         }
 
         this.ResetKeyTimer();
-        Debug.Log("turn right:" + this.dir);
     }
 }
