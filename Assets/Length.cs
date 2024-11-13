@@ -6,8 +6,8 @@ public class Length : MonoBehaviour
 {
     public Rigidbody snake_head;
     public GameObject snake_body;
-
-    private int maxLength = 12;
+    
+    private GameObject gameManager;
     private float growTimer = 0.0f;
     private float growWait = 0.1f;
     private float destroyTimer = 0.0f;
@@ -19,25 +19,19 @@ public class Length : MonoBehaviour
         this.growTimer += Time.deltaTime;
         this.destroyTimer += Time.deltaTime;
 
-        // rather than keep growing based on time,
-        // how about an event?
-        // when the snake moves
-        // call the create function
-
-        //if (growTimer > growWait)
-        //{
-        //    this.CreateBodyAtPosition();
-        //}
-
         if (
             destroyTimer > growWait &&
-            this.body.Count > maxLength
+            this.body.Count > gameManager.GetComponent<GameManagerScript>().GetCurrentLevelInfo().maxSnakeLength
         )
         {
             this.DestroyBodyAtPosition();
         }
     }
 
+    private void Start()
+    {
+        gameManager = GameObject.Find("GameManager");
+    }
     public void CreateBodyAtPosition(Vector3 pos)
     {
         var obj = Instantiate(

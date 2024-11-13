@@ -4,21 +4,38 @@ using UnityEngine;
 public class Collision : MonoBehaviour
 {
     public Movement movement;
+    
+    private GameObject gameManager;
+
+    public void Start()
+    {
+        this.gameManager = GameObject.Find("GameManager");
+    }
+    private void DestroySnake()
+    {
+        Destroy(gameObject);
+        gameManager.GetComponent<GameManagerScript>().EndGame();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Goal")
+        {
+            other.GetComponent<GoalScript>().Collect();
+            gameManager.GetComponent<GameManagerScript>().current_level += 1;
+        }
+    }
 
     private void OnCollisionEnter(UnityEngine.Collision collisionInfo)
     {
-        Debug.Log("We hit: " + collisionInfo.collider.tag);
-
-        GameObject gameManager = GameObject.Find("GameManager");
-
         if (collisionInfo.collider.tag == "SnakeBody")
         {
-            gameManager.GetComponent<GameManager>().EndGame();
+            this.DestroySnake();
         }
 
         if (collisionInfo.collider.tag == "Wall")
         {
-            gameManager.GetComponent<GameManager>().EndGame();
+            this.DestroySnake();
         }
     }
 }

@@ -21,6 +21,18 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5284897339370970140, guid: 75cd0029323a7e14d876e48347478514, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284897339370970140, guid: 75cd0029323a7e14d876e48347478514, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284897339370970140, guid: 75cd0029323a7e14d876e48347478514, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284897339370970140, guid: 75cd0029323a7e14d876e48347478514, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -62,7 +74,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5284897339370970142, guid: 75cd0029323a7e14d876e48347478514, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5284897339370970142, guid: 75cd0029323a7e14d876e48347478514, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -77,3 +89,21 @@ PrefabInstance:
     - {fileID: -7988226913793789271, guid: 75cd0029323a7e14d876e48347478514, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 75cd0029323a7e14d876e48347478514, type: 3}
+--- !u!1 &5943070317642806179 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5284897339370970128, guid: 75cd0029323a7e14d876e48347478514, type: 3}
+  m_PrefabInstance: {fileID: 1958429042396458931}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &-7066626199410005203
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5943070317642806179}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

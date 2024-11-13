@@ -9,23 +9,20 @@ public class Movement : MonoBehaviour
         UP,
         DOWN
     }
-
-    // public Rigidbody rigidBody;
-
     private Direction dir = Direction.RIGHT;
     private bool isKeyDown = false;
     private float keyDelay = 0.0f;
     private float keyTimer = 0.0f;
-
     private float moveTimer = 0.0f;
-    private float moveWait = 0.1f; // maybe this should be controlled by a third party...
+
+    private GameObject gameManager;
 
     private void Update()
     {
         this.keyTimer += Time.deltaTime;
         this.moveTimer += Time.deltaTime;
 
-        if (moveTimer > moveWait)
+        if (moveTimer > gameManager.GetComponent<GameManagerScript>().GetCurrentLevelInfo().growWaitTime)
         {
             this.Move();
         }
@@ -77,7 +74,10 @@ public class Movement : MonoBehaviour
         }
     }
 
-
+    private void Start()
+    {
+        gameManager = GameObject.Find("GameManager");
+    }
     private void Move()
     {
         var distance = gameObject.GetComponent<Rigidbody>().transform.localScale.x;

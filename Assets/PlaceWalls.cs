@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlaceWalls : MonoBehaviour
 {
-    public GameObject ground;
     public GameObject wall;
 
     private Dictionary<string, Vector3> positions = new Dictionary<string, Vector3>();
@@ -23,54 +22,58 @@ public class PlaceWalls : MonoBehaviour
 
     void setUpWalls()
     {
-        Vector3 groundPosition = this.ground.transform.localPosition;
-        float halfOfGroundWidth = this.ground.GetComponent<MeshCollider>().bounds.size.x / 2;
-        var directions = System.Enum.GetValues(typeof(Direction));
 
-        Vector3 GetPositionBasedOnDirection(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.Top:
-                    return new Vector3(groundPosition.x, groundPosition.y, halfOfGroundWidth);
-                case Direction.Down:
-                    return new Vector3(groundPosition.x, groundPosition.y, -halfOfGroundWidth);
-                case Direction.Right:
-                    return new Vector3(halfOfGroundWidth, groundPosition.y, groundPosition.z);
-                case Direction.Left:
-                    return new Vector3(-halfOfGroundWidth, groundPosition.y, groundPosition.z);
-                default:
-                    return new Vector3();
-            }
-        }
+        Vector3 groundPosition = gameObject.GetComponent<MeshCollider>().transform.localPosition;
+        float groundWidth = gameObject.GetComponent<MeshCollider>().bounds.size.x;
+        float groundHeight = gameObject.GetComponent<MeshCollider>().bounds.size.z;
 
-        Vector3 GetRotationBasedOnDirection(Direction dir)
-        {
-            switch (dir)
-            {
-                case Direction.Top:
-                    return new Vector3(0, 90, 90);
-                case Direction.Down:
-                    return new Vector3(0, 90, 90);
-                case Direction.Right:
-                    return new Vector3(0, 0, 90);
-                case Direction.Left:
-                    return new Vector3(0, 0, 90);
-                default:
-                    return new Vector3();
-            }
-        }
+        GameObject topWall = Instantiate(
+            wall,
+            new Vector3(groundPosition.x, groundPosition.y, groundHeight / 2),
+            Quaternion.Euler(new Vector3(0, 90, 90))
+        );
 
-        foreach (int i in directions)
-        {
-            //Debug.Log($"foreach: {i}, {(Direction)i}");
-            Direction dir = (Direction)i;
+        GameObject bottomWall = Instantiate(
+            wall,
+            new Vector3(groundPosition.x, groundPosition.y, -groundHeight / 2),
+            Quaternion.Euler(new Vector3(0, 90, 90))
+        );
 
-            var newWall = Instantiate(
-                wall,
-                GetPositionBasedOnDirection(dir),
-                Quaternion.Euler(GetRotationBasedOnDirection(dir))
-            );
-        }
+        GameObject rightWall = Instantiate(
+            wall,
+            new Vector3(groundWidth / 2, groundPosition.y, groundPosition.z),
+            Quaternion.Euler(new Vector3(0, 0, 90))
+        );
+
+        GameObject leftWall = Instantiate(
+            wall,
+            new Vector3(-groundWidth / 2, groundPosition.y, groundPosition.z),
+            Quaternion.Euler(new Vector3(0, 0, 90))
+        );
+
+        topWall.transform.localScale = new Vector3(
+            wall.GetComponent<BoxCollider>().size.x,
+            wall.GetComponent<BoxCollider>().size.y,
+            groundWidth * 2
+        );
+
+        bottomWall.transform.localScale = new Vector3(
+            wall.GetComponent<BoxCollider>().size.x,
+            wall.GetComponent<BoxCollider>().size.y,
+            groundWidth * 2
+        );
+
+        rightWall.transform.localScale = new Vector3(
+            wall.GetComponent<BoxCollider>().size.x,
+            wall.GetComponent<BoxCollider>().size.y,
+            groundWidth * 2
+        );
+
+        leftWall.transform.localScale = new Vector3(
+            wall.GetComponent<BoxCollider>().size.x,
+            wall.GetComponent<BoxCollider>().size.y,
+            groundWidth * 2
+        );
     }
 }
+
