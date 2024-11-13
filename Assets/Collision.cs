@@ -24,6 +24,11 @@ public class Collision : MonoBehaviour
             other.GetComponent<GoalScript>().Collect();
             gameManager.GetComponent<GameManagerScript>().current_level += 1;
         }
+
+        if (other.tag == "Wall")
+        {
+            this.DestroySnake();
+        }
     }
 
     private void OnCollisionEnter(UnityEngine.Collision collisionInfo)

@@ -8,19 +8,19 @@ public class Length : MonoBehaviour
     public GameObject snake_body;
     
     private GameObject gameManager;
-    private float growTimer = 0.0f;
-    private float growWait = 0.1f;
-    private float destroyTimer = 0.0f;
-
     private List<GameObject> body = new List<GameObject>();
+
+    // private float growTimer = 0.0f;
+    //private float growWait = 0.1f;
+    private float destroyTimer = 0.0f;
 
     void Update()
     {
-        this.growTimer += Time.deltaTime;
-        this.destroyTimer += Time.deltaTime;
+        //this.growTimer += Time.deltaTime;
+        destroyTimer += Time.deltaTime;
 
         if (
-            destroyTimer > growWait &&
+            destroyTimer > gameManager.GetComponent<GameManagerScript>().GetCurrentLevelInfo().growWaitTime &&
             this.body.Count > gameManager.GetComponent<GameManagerScript>().GetCurrentLevelInfo().maxSnakeLength
         )
         {
@@ -62,10 +62,5 @@ public class Length : MonoBehaviour
     private void ResetDestroyTimer()
     {
         this.destroyTimer = 0;
-    }
-
-    private void ResetGrowTimer()
-    {
-        this.growTimer = 0;
     }
 }
